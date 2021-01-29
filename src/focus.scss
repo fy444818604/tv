@@ -1,0 +1,148 @@
+.play-icon {
+	position: absolute;
+	right: 27px;
+	top: 167px;
+	height: 76px;
+	width: 76px;
+	background: linear-gradient(128deg,#5af5de 12%, #4b90ef 88%);
+	border-radius: 100%;
+	box-shadow: 0px 0px 12px 0px rgba(90,245,222,0.50); 
+	display: none;
+}
+
+.triangle{
+	width: 0;
+	height: 0;
+	border-top: 14px solid transparent;
+	border-left: 27px solid #FFFFFF;
+	border-bottom: 14px solid transparent;
+	position: absolute;
+	left: 55%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+
+
+
+* {
+	font-family: "思源黑体正常_0";
+	font-size: 1.866666rem;
+	color: rgba(255,255,255,.5);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.focus {
+	position: relative;
+	z-index: 9999;
+	// transition: all .25s;
+	// -webkit-transition: all .25s;
+}
+
+.focus.normal-model {
+	background: linear-gradient(128deg,#5af5de 12%, #4b90ef 88%);
+}
+
+.focus.normal-model>div,.focus.normal-model>i {
+	color: #FFFFFF;
+}
+
+.menu>li.focus {
+	background: linear-gradient(128deg,#5af5de 12%, #4b90ef 88%);
+	border-radius: 36px;
+}
+
+.menu>li.focus::after {
+	display: none;
+}
+
+.live-model>li.focus,.model-row-4>li.focus {
+	transform: scale(1.07);
+	// border: 4px solid #FFFFFF;
+	border-radius: 1px;   
+	box-shadow: 0 0 0 4px #FFFFFF;
+	// outline: 4px solid #FFFFFF;
+	// -moz-outline-radius: 12px; 
+	// border-radius: 12px;
+}
+
+.model-row-4>li.focus {
+	background-color: #FFFFFF;
+}
+
+.model-row-4>li.focus>.play-icon {
+	display: block;
+}
+
+.model-row-4>li.focus>.res-name {
+	background: #ffffff;
+	color: rgba(0,0,0,0.80);
+}
+
+.normal-model.focus>.normal {
+	display: none;
+}
+
+.normal-model.focus>.white {
+	display: block;
+}
+
+.live-type>li.focus {
+	border-radius: 1px;
+	box-shadow: 0 0 0 4px #FFFFFF;
+	transform: scale(1.07);
+}
+
+.login-out.focus {
+	background: linear-gradient(90deg,#5af5de, #4b90ef);
+}
+
+.focus.gradient {
+	background: linear-gradient(128deg,#5af5de 12%, #4b90ef 88%);
+	color: rgba(255,255,255,.9);
+}
+
+.focus.introduction {
+	position: relative;
+	padding: 20px 16px;
+	left: -16px;
+	border-radius: 8px;
+}
+
+.focus.photo-focus {
+	transform: scale(1.07);
+	box-shadow: 0 0 0 4px #FFFFFF;
+	border-radius: 1px;
+}
+
+.video-focus.focus,.online-left.focus {
+	transform: scale(1.05);
+	box-shadow: 0 0 0 4px #FFFFFF;
+	border-radius: 1px;
+}
+
+.focus .play-icon {
+	display: block;
+}
+
+.focus .live-icon {
+	display: none;
+}
+
+.search-list-wrap>li.focus {
+	background: linear-gradient(128deg,#5af5de 12%, #4b90ef 88%);
+	border-radius: 8px;
+}
+
+.focus .login-inp {
+	border: 4px solid #ffffff;
+}
+
+.login-btn.focus {
+	background: linear-gradient(128deg,#5af5de 12%, #4b90ef 88%);
+	border-radius: 20px;
+}
