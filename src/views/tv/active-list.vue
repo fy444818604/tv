@@ -53,12 +53,17 @@
 				})
 			},
 			live() {
-				this.$api.getActiveLiving({
-					pageNo:1,
-					pageSize:7,
-				}).then(res => {
-					this.liveList = res.data
-				})
+				if(this.type == 1){
+					this.liveList = []
+				}else [
+					this.$api.getActiveLiving({
+						pageNo:1,
+						pageSize:7,
+						type:this.type - 1
+					}).then(res => {
+						this.liveList = res.data
+					})
+				]
 			}
 		},
 		created() {

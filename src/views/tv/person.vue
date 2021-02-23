@@ -57,9 +57,15 @@
 			},
 			loginOut() {
 				window.localStorage.removeItem("token")
-				this.$router.push({
-					path:'/sign'
-				})
+				if(this.isLogin){
+					this.$router.push({
+						path:'/sign'
+					})
+				}else {
+					this.$router.push({
+						path:'/component/detail/4/live'
+					})
+				}
 			}
 		},
 		mounted() {

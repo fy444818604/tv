@@ -79,13 +79,15 @@ function interceptHttpCodeAndBusinessCode(code, msg) {
       // 清除token
       // store.commit("clearLogin")
 			window.localStorage.removeItem('token')
-			if(Vue.prototype.isLogin) {
-				router.replace({
-				  path: "/sign",
-				})
-			}else {
-				window.location.reload()
-			}
+			setTimeout(() => {
+				if(Vue.prototype.isLogin) {
+					router.replace({
+					  path: "/sign",
+					})
+				}else {
+					window.location.reload()
+				}
+			},1000)
       break
     case 403:
       router.replace({

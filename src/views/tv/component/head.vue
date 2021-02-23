@@ -10,8 +10,8 @@
 				<img class="white" src="../../../assets/tv/photo1.png" alt="">
 				<div>登录</div>
 			</div>
-			<div class="normal-model" v-if="name != ''">
-				<img class="normal" :src="userFace==''?require('../../../assets/tv/photo.png'):host+userFace" alt="">
+			<div class="normal-model" @click="jumpLogin" v-items v-if="name != ''">
+				<img :src="userFace==''?require('../../../assets/tv/photo.png'):host+userFace" alt="">
 				<div>{{name}}</div>
 			</div>
 		</div>
@@ -64,9 +64,15 @@
 			},
 			jumpLogin() {
 				if(event.which != 13) return
-				this.$router.push({
-					path:'/sign'
-				})
+				if(window.localStorage.getItem('token')){
+					this.$router.push({
+						path:'/person'
+					})
+				}else {
+					this.$router.push({
+						path:'/sign'
+					})
+				}
 			},
 			getUser() {
 				if(window.localStorage.getItem('token')){

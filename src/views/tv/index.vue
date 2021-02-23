@@ -3,7 +3,7 @@
 		<head-tips></head-tips>
 		<main>
 			<ul class="menu">
-				<li v-for="(item,index) in nav" @left="navLeft(index)" v-items :key="item+index" :class="item.active?'active':''"
+				<li v-for="(item,index) in nav" @right="navRight(index)" @left="navLeft(index)" v-items :key="item+index" :class="item.active?'active':''"
 				 @focus="menuChange(index)" :name="item.name">
 					{{item.name}}
 					<img style="width: 48px;height: 48px;" class="blue" v-if="item.name == '直播'" src="../../assets/tv/2.gif" alt="">
@@ -20,10 +20,7 @@
 	export default {
 		data() {
 			return {
-				nav: [{
-						name: '我的',
-						active: false
-					},
+				nav: [
 					{
 						name: '直播',
 						active: false
@@ -95,13 +92,13 @@
 					if (index == i) v.active = true
 					else v.active = false
 				})
-				if (index == 0) {
-					if(window.localStorage.getItem('token')){
-						this.$router.push({
-							path: '/person'
-						})
-					}
-				} else if (index == 1) {
+				if (this.nav[index].name == '我的') {
+					// if(window.localStorage.getItem('token')){
+					// 	this.$router.push({
+					// 		path: '/person'
+					// 	})
+					// }
+				} else if (this.nav[index].name == '直播') {
 					if (this.$route.path != '/component/detail/4/live') {
 						this.$router.push({
 							path: './live'
@@ -129,6 +126,15 @@
 					})
 					this.$service.move(this.$service.items[itemIndex])
 				} 
+			},
+			navRight(index) {
+				if (index != this.nav.length) {
+					let itemIndex = 0
+					this.$service.items.map((v,i) => {
+						if(v.id == this.$service.pointer.id) itemIndex = i+1
+					})
+					this.$service.move(this.$service.items[itemIndex])
+				}
 			},
 			isFullscreen() {
 				return document.fullscreenElement ||

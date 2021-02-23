@@ -34,7 +34,7 @@
 						{{ tvName }}
 					</div>
 					<ul class="authors" v-if="talkName">
-						<li v-items class="gradient"  @right="" @left="" @click="handleDetail">{{ talkName }}</li>
+						<li v-items class="gradient" @right="" @left="" @click="handleDetail">{{ talkName }}</li>
 					</ul>
 					<div class="no-authors" v-else>暂无主讲人</div>
 					<div class="introduction gradient" v-if="themeBackMask" v-items @click="handleDetail" @right @left>
@@ -45,7 +45,7 @@
 						暂无简介
 					</div>
 					<ul class="btn-group">
-						<li class="gradient" name="full" @click="handleVideoScreen" v-items="{default:true}" @left>
+						<li class="gradient" name="full" @click="handleVideoScreen" v-items="{default:true}" @left="fullLeft" @right="fullRight">
 							<i class="iconfont iconquanping"></i>
 							<div>全屏</div>
 						</li>
@@ -73,7 +73,8 @@
 				</div>
 				<template v-if="videoList.length > 0">
 					<li v-for="(item, index) in videoList" class="video-focus" v-items :key="index" :class="item.active?'active':''"
-					 @click="handleChangeVideo(item.eventAttrId, item.eventAttrPath, index)" @up="up" @down="down" @right="right(index)" @left="left(index)">
+					 @click="handleChangeVideo(item.eventAttrId, item.eventAttrPath, index)" @up="up" @down="down" @right="right(index)"
+					 @left="left(index)">
 						<div class="play-icon">
 							<div class="triangle"></div>
 						</div>
@@ -113,9 +114,9 @@
 				<div class="atth-title">图片</div>
 				<div id="scroll" class="scroll">
 					<ul style="height: 270px;">
-						<li v-for="(item, index) in imgList" @click="handleShowBigImage(item)" class="photo-focus" :key="index" @down="imgDown(index)" @up="imgUp(index)" @left="imgLeft(index)" @right="imgRight(index)" v-items style="width: 200px; height: 200px; border-radius: 8px">
-							<img :src="videoCdn + item.eventAttrSmallImgUrl" alt="" style="width: 100%; height: 100%; border-radius: 8px"
-							  />
+						<li v-for="(item, index) in imgList" @click="handleShowBigImage(item)" class="photo-focus" :key="index" @down="imgDown(index)"
+						 @up="imgUp(index)" @left="imgLeft(index)" @right="imgRight(index)" v-items style="width: 200px; height: 200px; border-radius: 8px">
+							<img :src="videoCdn + item.eventAttrSmallImgUrl" alt="" style="width: 100%; height: 100%; border-radius: 8px" />
 							<el-dialog :show-close="false" class="img-dialog" :visible.sync="item.visible">
 								<div class="icon" @click="handleClose(item)">
 									<i class="iconfont icon-close"></i>
@@ -130,7 +131,8 @@
 				<div class="atth-title">作业</div>
 				<div id="scroll1" class="scroll">
 					<ul style="height: 270px;">
-						<li v-for="(item, index) in homeworkList" :key="index" class="photo-focus" @click="handleShowBigHomeWork(item)" @down="imgDown1(index)" @up="imgUp1(index)" @left="imgLeft1(index)" @right="imgRight1(index)" v-items>
+						<li v-for="(item, index) in homeworkList" :key="index" class="photo-focus" @click="handleShowBigHomeWork(item)"
+						 @down="imgDown1(index)" @up="imgUp1(index)" @left="imgLeft1(index)" @right="imgRight1(index)" v-items>
 							<img :src="videoCdn + item.homeworkUrl" style="width: 200px; height: 200px; border-radius: 8px" />
 							<div></div>
 							<el-dialog :show-close="false" class="img-dialog" :visible.sync="item.visible" @click="handleClose(item)">
@@ -156,7 +158,7 @@
 	export default {
 		data() {
 			return {
-				isActive:true,
+				isActive: true,
 				videoCdn: process.env.VUE_APP_SOURCEURL,
 				author: ["梁泳珊", "杨佩"],
 				btnGroup: [{
@@ -192,18 +194,18 @@
 				liveIndex: true, // 是否在直播框
 				videoId: null, // 录播id
 				videoSrc: "", // 录播src
-				liveShotList:[], //直播截图
+				liveShotList: [], //直播截图
 
 				// 资源相关
 				isRes: false,
 				resourcePic: "", // 资源图片
 				resourcePath: "", // 资源路径
 				resName: '',
-				dom:null,
-				dom1:null,
-				dom2:null,
-				
-				flag:true
+				dom: null,
+				dom1: null,
+				dom2: null,
+
+				flag: true
 			};
 		},
 		components: {
@@ -218,6 +220,19 @@
 			},
 		},
 		methods: {
+			fullLeft() {
+				if(this.fullscreenElement() && this.videoDom.src.substring(0,4) != 'blob') {
+					this.videoDom.currentTime = this.videoDom.currentTime - 15
+				}
+			},
+			fullRight() {
+				if(this.fullscreenElement() && this.videoDom.src.substring(0,4) != 'blob') {
+					this.videoDom.currentTime = this.videoDom.currentTime + 15
+				}
+				if(!this.fullscreenElement()) {
+					this.$service.move('right')
+				}
+			},
 			getIsRes() {
 				if (this.aid) this.isRes = false
 				else this.isRes = true
@@ -338,44 +353,44 @@
 				item.visible = false;
 			},
 			handleShowBigImage(item) {
-				if(event.which != 13) return
-				if(!this.flag) return
+				if (event.which != 13) return
+				if (!this.flag) return
 				this.flag = false
-				if(item.visible){
+				if (item.visible) {
 					item.visible = false
 					this.$nextTick(() => {
 						setTimeout(() => {
 							this.$service.pointer.$el.classList.add('focus')
 							this.flag = true
-						},500)
+						}, 500)
 					})
 					return
 				}
 				this.$service.pointer.$el.classList.remove('focus')
-				item.visible = !item.visible ;
+				item.visible = !item.visible;
 				this.$nextTick(() => {
 					setTimeout(() => {
-						if(!item.visible) this.$service.pointer.$el.classList.add('focus')
-							this.flag = true
-					},500)
+						if (!item.visible) this.$service.pointer.$el.classList.add('focus')
+						this.flag = true
+					}, 500)
 				})
 			},
 			handleShowBigHomeWork(item) {
 				// item.visible = true;
-				if(event.which != 13) return
-				if(!this.flag) return
+				if (event.which != 13) return
+				if (!this.flag) return
 				this.flag = false
 				this.$service.pointer.$el.classList.remove('focus')
-				item.visible = !item.visible ;
+				item.visible = !item.visible;
 				this.$nextTick(() => {
 					setTimeout(() => {
-						if(!item.visible) this.$service.pointer.$el.classList.add('focus')
-							this.flag = true
-					},800)
+						if (!item.visible) this.$service.pointer.$el.classList.add('focus')
+						this.flag = true
+					}, 800)
 				})
 			},
 			handleChangeLive() {
-				if(event.which != 13) return
+				if (event.which != 13) return
 				this.isActive = true
 				this.videoList.map((v) => {
 					v.active = false
@@ -388,12 +403,12 @@
 				this.flvUrl && this.flvPlay(this.flvUrl);
 			},
 			handleChangeVideo(id, src, index) {
-				if(event.which != 13) return
+				if (event.which != 13) return
 				this.isActive = false
-				this.videoList.map((v,i) => {
-					if(i == index) {
+				this.videoList.map((v, i) => {
+					if (i == index) {
 						v.active = true
-					}else {
+					} else {
 						v.active = false
 					}
 				})
@@ -408,26 +423,26 @@
 				})
 			},
 			handleVideoScreen() {
-				if(event.which != 13) return
+				if (event.which != 13) return
 				if (this.videoDom.style.display != 'none') {
 					this.launchFullScreen(this.videoDom);
 				}
 			},
 			handleDetail() {
-				if(event.which != 13) return
+				if (event.which != 13) return
 				let query;
-				if(this.isRes){
+				if (this.isRes) {
 					query = {
-						resourceId:this.resourceId
+						resourceId: this.resourceId
 					}
-				}else {
+				} else {
 					query = {
-						aid:this.aid
+						aid: this.aid
 					}
 				}
 				this.$router.push({
-					path:'/activeTip',
-					query:query
+					path: '/activeTip',
+					query: query
 				})
 			},
 
@@ -449,7 +464,9 @@
 								"";
 							this.themeBackMaskLen = this.gblen(this.themeBackMask);
 							data.videoList.map(v => {
-								Object.assign(v,{active:false})
+								Object.assign(v, {
+									active: false
+								})
 							})
 							this.videoList = data.videoList;
 							this.attachment = data.attrList;
@@ -457,7 +474,7 @@
 								this.$set(item, "visible", false);
 								return item;
 							});
-							
+
 							this.liveShotList = data.liveShotList
 							if (data.eventAptRecord && data.eventAptRecord.homeworkList) {
 								this.homeworkList = data.eventAptRecord.homeworkList.map(
@@ -479,7 +496,7 @@
 					.get("event/tv/getLiveUrls.do", {
 						params: {
 							eventId: this.aid,
-							id:+new Date()
+							id: +new Date()
 						},
 					})
 					.then((res) => {
@@ -522,9 +539,18 @@
 					el.mozRequestFullScreen();
 				} else if (el.webkitRequestFullScreen) {
 					el.webkitRequestFullScreen();
+					setTimeout(() => {
+						this.fullscreenElement()
+					},1000)
 				} else if (el.msRequestFullscreen) {
 					el.msRequestFullscreen();
 				}
+			},
+			fullscreenElement() {
+				var fullscreenEle = document.fullscreenElement ||
+					document.mozFullScreenElement ||
+					document.webkitFullscreenElement;
+				return fullscreenEle;
 			},
 			// 资源相关
 			getResourDetail() {
@@ -553,120 +579,120 @@
 					});
 			},
 			handlePlayResource() {
-				if(event.which != 13) return
+				if (event.which != 13) return
 				this.videoDom.setAttribute("src", this.videoCdn + this.videoSrc);
 			},
 			right(index) {
-					event.preventDefault()
-				if(index != this.videoList.length - 1) {
+				event.preventDefault()
+				if (index != this.videoList.length - 1) {
 					let itemIndex = 0
-					this.$service.items.map((v,i) => {
-						if(v.id == this.$service.pointer.id) itemIndex = i+1
+					this.$service.items.map((v, i) => {
+						if (v.id == this.$service.pointer.id) itemIndex = i + 1
 					})
 					this.$service.move(this.$service.items[itemIndex])
-					let left = Number(this.dom.scrollLeft) + 590 
-					this.dom.scrollTo(left,0)
+					let left = Number(this.dom.scrollLeft) + 590
+					this.dom.scrollTo(left, 0)
 				}
 			},
 			left(index) {
-					event.preventDefault()
-				if(index == 0) {
+				event.preventDefault()
+				if (index == 0) {
 					let itemIndex = 0
-					this.$service.items.map((v,i) => {
-						if(v.data.name == 'online') itemIndex = i
+					this.$service.items.map((v, i) => {
+						if (v.data.name == 'online') itemIndex = i
 					})
 					this.$service.move(this.$service.items[itemIndex])
-				}else {
+				} else {
 					let itemIndex = 0
-					this.$service.items.map((v,i) => {
-						if(v.id == this.$service.pointer.id) itemIndex = i-1
+					this.$service.items.map((v, i) => {
+						if (v.id == this.$service.pointer.id) itemIndex = i - 1
 					})
 					this.$service.move(this.$service.items[itemIndex])
-					let left = Number(this.dom.scrollLeft) - 590 
-					this.dom.scrollTo(left,0)
+					let left = Number(this.dom.scrollLeft) - 590
+					this.dom.scrollTo(left, 0)
 				}
 			},
 			up() {
 				let itemIndex = 0
-				this.$service.items.map((v,i) => {
-					if(v.data.name == 'full') itemIndex = i
+				this.$service.items.map((v, i) => {
+					if (v.data.name == 'full') itemIndex = i
 				})
 				this.$service.move(this.$service.items[itemIndex])
 			},
 			down() {
 				let top = Number(this.$parent.wrap.scrollTop) + 350
-				this.$parent.wrap.scrollTo(0,top)
+				this.$parent.wrap.scrollTo(0, top)
 				this.$service.move('down')
 			},
 			imgLeft(index) {
 				event.preventDefault()
-				if(this.imgList[index].visible){
+				if (this.imgList[index].visible) {
 					this.imgList[index].visible = false
 					return
 				}
 				let left = Number(this.dom1.scrollLeft) - 250
-				this.dom1.scrollTo(left,0)
+				this.dom1.scrollTo(left, 0)
 				this.$service.move('left')
 			},
 			imgRight(index) {
 				event.preventDefault()
-				if(this.imgList[index].visible){
+				if (this.imgList[index].visible) {
 					this.imgList[index].visible = false
 					return
 				}
-				if(index == this.imgList.length-1) return
+				if (index == this.imgList.length - 1) return
 				let left = Number(this.dom1.scrollLeft) + 250
-				this.dom1.scrollTo(left,0)
+				this.dom1.scrollTo(left, 0)
 				this.$service.move('right')
 			},
 			imgUp(index) {
-				if(this.imgList[index].visible){
+				if (this.imgList[index].visible) {
 					this.imgList[index].visible = false
 					return
 				}
 				let left = Number(this.$parent.wrap.scrollTop) - 250
-				this.$parent.wrap.scrollTo(left,0)
+				this.$parent.wrap.scrollTo(left, 0)
 				this.$service.move('up')
 			},
 			imgDown(index) {
-				if(this.imgList[index].visible){
+				if (this.imgList[index].visible) {
 					this.imgList[index].visible = false
 					return
-				}else {
+				} else {
 					this.$service.move('down')
 				}
 			},
 			imgUp1(index) {
-				if(this.homeworkList[index].visible){
+				if (this.homeworkList[index].visible) {
 					this.homeworkList[index].visible = false
 					return
 				}
 				this.$service.move('up')
 			},
 			imgDown1(index) {
-				if(this.homeworkList[index].visible){
+				if (this.homeworkList[index].visible) {
 					this.homeworkList[index].visible = false
 					return
 				}
 				this.$service.move('down')
 			},
 			imgLeft1(index) {
-				if(this.homeworkList[index].visible){
+				if (this.homeworkList[index].visible) {
 					this.homeworkList[index].visible = false
 					return
 				}
 				let left = Number(this.dom2.scrollLeft) - 200
-				this.dom2.scrollTo(left,0)
+				this.dom2.scrollTo(left, 0)
 				this.$service.move('left')
 			},
 			imgRight1(index) {
-				if(this.homeworkList[index].visible){
+				if (this.homeworkList[index].visible) {
 					this.homeworkList[index].visible = false
 					return
 				}
-				if(index == this.homeworkList.length-1) return
+				if (index == this.homeworkList.length - 1) return
 				let left = Number(this.dom2.scrollLeft) + 200
-				this.dom2.scrollTo(left,0)
+				this.dom2.scrollTo(left, 0)
 				this.$service.move('right')
 			},
 		},
@@ -679,15 +705,15 @@
 			setTimeout(() => {
 				this.dom1 = document.getElementById('scroll')
 				this.dom2 = document.getElementById('scroll1')
-			},1000)
+			}, 1000)
 			this.$service.move(this.$service.pointer);
 		},
 		beforeDestroy() {
 			this.flvPlayer.pause()
-			 this.flvPlayer.unload()
-			 this.flvPlayer.detachMediaElement()
-			 this.flvPlayer.destroy()
-			 this.flvPlayer = null
+			this.flvPlayer.unload()
+			this.flvPlayer.detachMediaElement()
+			this.flvPlayer.destroy()
+			this.flvPlayer = null
 		}
 	};
 </script>
@@ -789,7 +815,7 @@
 		margin-top: 24px;
 		margin-bottom: 3px;
 	}
-	
+
 	.no-authors {
 		height: 87px;
 		line-height: 87px;
@@ -839,7 +865,7 @@
 			}
 		}
 	}
-	
+
 	.no-introduction {
 		height: 127px;
 		padding: 20px 0;
@@ -1100,23 +1126,23 @@
 			}
 		}
 	}
-	
+
 	.no-padding ul li {
 		padding: 0;
 		margin-top: 25px;
 		margin-bottom: 25px;
 	}
-	
-	.no-padding  ul {
+
+	.no-padding ul {
 		width: auto;
 		overflow-x: visible;
-		display: inline-flex!important;
+		display: inline-flex !important;
 	}
-	
+
 	.no-padding ul li:last-child {
 		margin-right: 0;
-	}	
-	
+	}
+
 	.scroll {
 		overflow-x: scroll;
 		width: 100%;
@@ -1124,16 +1150,16 @@
 		// padding-left: 30px;
 		// left: -30px;
 	}
-	
+
 	.scroll>ul>li:nth-child(1) {
 		margin-left: 10px;
 	}
-	
+
 	.play-icon {
 		right: 24px;
 		top: 120px;
 	}
-	
+
 	.play-icon>img {
 		width: 48px;
 		height: 48px;
@@ -1141,12 +1167,12 @@
 		margin-top: 14px;
 		margin-left: 14px;
 	}
-	
+
 	.video-focus.active .play-live {
-		display: block!important;
+		display: block !important;
 	}
-	
-	.active.play-live{
-		display: block!important;
+
+	.active.play-live {
+		display: block !important;
 	}
 </style>

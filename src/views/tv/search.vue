@@ -57,9 +57,13 @@
 					id:+new Date()
 				}).then(res => {
 					if(!this.flag) return
-					this.getList()
 					if(res.data) {
-						this.searchText = res.data
+						// this.searchText = res.data
+						let query;
+						let item = JSON.parse(res.data)
+						this.jump(item)
+					}else {
+						this.getList()
 					}
 				}).catch(() => {
 					if(!this.flag) return
@@ -141,14 +145,15 @@
 				event.preventDefault()
 			},
 			jump(item) {
+				console.log(item);
 				let query;
-				if(item.type == "1"){
+				if(item.types == "1"){
 					query = {
-						resourceId:item.id
+						aid:item.id
 					}
 				}else {
 					query = {
-						aid:item.id
+						resourceId:item.id
 					}
 				}
 				this.$router.push({
